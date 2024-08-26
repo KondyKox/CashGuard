@@ -1,34 +1,75 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Button from "./Button";
 import { UserProps } from "../types/UserProps";
+import {
+  renderAuthButtons,
+  renderNavLinks,
+} from "../utilities/renderNavElements";
 
 const Navbar: React.FC<UserProps> = ({ isLoggedIn, onLogin, onLogout }) => {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [isMobile, setMobile] = useState(false);
+
+  // Resize window
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    windowWidth <= 786 ? setMobile(true) : setMobile(false);
+  });
+
+  // Toggle mobile menu
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+
+  // Mobile navbar
+  const renderMobileMenu = () => {
+    return (
+      <div
+        className={`absolute top-0 left-0 w-full h-full ${
+          menuOpen ? "flex flex-col justify-center items-center" : "hidden"
+        }`}
+        style={{ zIndex: 10 }}
+      >
+        <div>{renderNavLinks(isMobile)}</div>
+        {renderAuthButtons({ isLoggedIn, onLogin, onLogout }, isMobile)}
+      </div>
+    );
+  };
+
   return (
     <nav className="flex justify-between items-center p-4 border-b border-slate-900">
       <div className="font-bold text-lg">Kalkulator Wydatków</div>
-      <div>
-        <ul className="flex gap-x-7">
-          <li>
-            <Button className="bg-transparent">Moje wydatki</Button>
-          </li>
-          <li>
-            <Button className="bg-transparent">Dodaj wydatek</Button>
-          </li>
-        </ul>
-      </div>
-      <div>
-        <div>
-          {isLoggedIn ? (
-            <Button onClick={onLogout}>
-              <img src="/logout.png" alt="Logout" className="w-12 h-12" />
-            </Button>
-          ) : (
-            <Button onClick={onLogin}>
-              <img src="/login.png" alt="Login" className="w-12 h-12" />
-            </Button>
-          )}
-        </div>
-      </div>
+
+      {isMobile ? (
+        <>
+          <Button onClick={toggleMenu} style={{ zIndex: 20 }}>
+            <img
+              src="/mobile_navbar.png"
+              alt="Mobile Menu"
+              className="w-7 h-7"
+            />
+          </Button>
+          {renderMobileMenu()}
+        </>
+      ) : (
+        <>
+          <div>{renderNavLinks(isMobile)}</div>
+          <div>
+            {renderAuthButtons({ isLoggedIn, onLogin, onLogout }, isMobile)}
+          </div>
+        </>
+      )}
     </nav>
   );
 };
