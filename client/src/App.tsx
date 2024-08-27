@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Navbar from "./components/Navbar";
 import { UserProps } from "./types/UserProps";
+import Expenses from "./pages/Expenses";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -19,6 +20,7 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-800 text-white">
       <Navbar {...userProps} />
+      <Expenses />
     </div>
   );
 }

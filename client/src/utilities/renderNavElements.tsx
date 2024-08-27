@@ -3,7 +3,7 @@ import { UserProps } from "../types/UserProps";
 
 // Nav links
 const navLinks = [
-  { label: "Moje wydatki", onClick: () => console.log("Moje wydatki clicked") },
+  { label: "Wydatki", onClick: () => console.log("Wydatki clicked") },
   {
     label: "Dodaj wydatek",
     onClick: () => console.log("Dodaj wydatek clicked"),
