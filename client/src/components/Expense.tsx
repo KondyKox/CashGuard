@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
 import { ExpenseProps } from "../types/ExpenseProps";
+import { MobileContext } from "../context/MobileContext";
 
 const Expense: React.FC<ExpenseProps> = ({
   amount,
@@ -9,21 +10,26 @@ const Expense: React.FC<ExpenseProps> = ({
   dueDate,
   isPaid = false,
 }) => {
+  const context = useContext(MobileContext);
+  const isMobile = context ? context.isMobile : false;
+
   return (
-    <div className="rounded border border-secondary p-4 m-4 min-w-1/2 hover:bg-secondary cursor-pointer transition-all duration-500 hover:shadow-lg">
+    <div
+      className={`rounded border border-secondary p-4 m-2 hover:bg-secondary cursor-pointer transition-all duration-500 hover:shadow-lg h-auto ${
+        isMobile ? "w-2/3" : "w-1/2"
+      }`}
+    >
       <div className="flex justify-between items-center font-bold text-2xl text-red">
         <span>{addedBy}</span>
         <span>{amount}zł</span>
       </div>
       <div className="w-full py-4 text-base">{description}</div>
       <footer className="flex flex-col">
-        <span className="flex justify-between items-center text-sm pt-4 w-full">
+        <span className="flex flex-col justify-between items-end text-sm pt-4 w-full">
           Dodano: {new Date(date).toLocaleDateString()}
-          <span>
-            {dueDate && (
-              <span>Termin: {new Date(dueDate).toLocaleDateString()}</span>
-            )}
-          </span>
+          {dueDate && (
+            <span>Termin: {new Date(dueDate).toLocaleDateString()}</span>
+          )}
         </span>
         <span
           className={`text-xl py-4 font-bold ${

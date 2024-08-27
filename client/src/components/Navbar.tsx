@@ -1,31 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import Button from "./Button";
 import { UserProps } from "../types/UserProps";
 import {
   renderAuthButtons,
   renderNavLinks,
 } from "../utilities/renderNavElements";
+import { MobileContext } from "../context/MobileContext";
+
+// Optional: Define a default value for isMobile
+const defaultMobileContext = { isMobile: false };
 
 const Navbar: React.FC<UserProps> = ({ isLoggedIn, onLogin, onLogout }) => {
+  // Use context and provide a default value if context is undefined
+  const context = useContext(MobileContext);
+  const isMobile = context ? context.isMobile : defaultMobileContext.isMobile;
+
   const [menuOpen, setMenuOpen] = useState(false);
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const [isMobile, setMobile] = useState(false);
-
-  // Resize window
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  useEffect(() => {
-    windowWidth <= 786 ? setMobile(true) : setMobile(false);
-  });
 
   // Toggle mobile menu
   const toggleMenu = () => {
@@ -58,7 +48,11 @@ const Navbar: React.FC<UserProps> = ({ isLoggedIn, onLogin, onLogout }) => {
 
       {isMobile ? (
         <>
-          <Button className="filter invert" onClick={toggleMenu} style={{ zIndex: 20 }}>
+          <Button
+            className="filter invert"
+            onClick={toggleMenu}
+            style={{ zIndex: 20 }}
+          >
             <img
               src="/mobile_navbar.png"
               alt="Mobile Menu"

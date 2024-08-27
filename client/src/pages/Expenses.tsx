@@ -1,12 +1,16 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Expense from "../components/Expense";
 import { ExpenseProps } from "../types/ExpenseProps";
+import { MobileContext } from "../context/MobileContext";
 
 const selectedCategoryKey = "ExpenseCalculator__SelectedCategory"; // Local Storage Key
 
 type Category = "My Expenses" | "All Expenses"; // Expenses category
 
 const Expenses = () => {
+  const context = useContext(MobileContext);
+  const isMobile = context ? context.isMobile : false;
+
   const [selectedCategory, setSelectedCategory] = useState<Category>(() => {
     const savedCategory = localStorage.getItem(selectedCategoryKey);
     return (savedCategory as Category) || "My Expenses";
@@ -38,8 +42,12 @@ const Expenses = () => {
   }, []);
 
   return (
-    <main className="flex flex-col justify-center items-center p-4">
-      <div className="rounded bg-secondary px-2 py-1 flex justify-center items-center min-w-1/2">
+    <div className="flex flex-col justify-center items-center p-4">
+      <div
+        className={`rounded bg-secondary px-2 py-1 flex justify-center items-center ${
+          isMobile ? "w-2/3" : "w-1/2"
+        }`}
+      >
         <select
           name="select-category"
           id="category"
@@ -51,12 +59,12 @@ const Expenses = () => {
           <option value="Wszystkie wydatki">Wszystkie wydatki</option>
         </select>
       </div>
-      <div>
+      <div className="w-full flex flex-col items-center mt-4">
         {expenses.map((expense, index) => (
           <Expense key={index} {...expense} />
         ))}
       </div>
-    </main>
+    </div>
   );
 };
 
