@@ -31,13 +31,13 @@ const Expenses = () => {
 
   return (
     <main className="flex flex-col justify-center items-center p-4">
-      <div className="rounded bg-slate-400 px-2 py-1 flex justify-center items-center w-2/3">
+      <div className="rounded bg-secondary px-2 py-1 flex justify-center items-center w-1/2">
         <select
           name="select-category"
           id="category"
           value={selectedCategory}
           onChange={handleCategoryChange}
-          className="bg-slate-400 px-2 py-1 w-full outline-none"
+          className="bg-secondary px-2 py-1 w-full outline-none"
         >
           <option value="Moje wydatki">Moje wydatki</option>
           <option value="Wszystkie wydatki">Wszystkie wydatki</option>

@@ -36,20 +36,25 @@ const Navbar: React.FC<UserProps> = ({ isLoggedIn, onLogin, onLogout }) => {
   const renderMobileMenu = () => {
     return (
       <div
-        className={`absolute top-0 left-0 w-full h-full ${
+        className={`absolute top-0 left-0 w-full h-full bg-primary ${
           menuOpen ? "flex flex-col justify-center items-center" : "hidden"
         }`}
         style={{ zIndex: 10 }}
       >
+        <div className="p-4 m-4">
+          <h1 className="font-bold text-xl ">Kalkulator Wydatków</h1>
+        </div>
         <div>{renderNavLinks(isMobile)}</div>
-        {renderAuthButtons({ isLoggedIn, onLogin, onLogout }, isMobile)}
+        <div>
+          {renderAuthButtons({ isLoggedIn, onLogin, onLogout }, isMobile)}
+        </div>
       </div>
     );
   };
 
   return (
     <nav className="flex justify-between items-center p-4 border-b border-slate-900">
-      <div className="font-bold text-lg">Kalkulator Wydatków</div>
+      <div className="font-bold text-xl">Kalkulator Wydatków</div>
 
       {isMobile ? (
         <>

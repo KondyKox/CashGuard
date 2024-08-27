@@ -40,7 +40,7 @@ export const renderAuthButtons = (
         <img
           src={isLoggedIn ? "/logout.png" : "/login.png"}
           alt={isLoggedIn ? "Logout" : "Login"}
-          className={`${ isMobile ? "w-16 h-16" : "w-12 h-12"}`}
+          className={`filter invert ${ isMobile ? "w-16 h-16" : "w-12 h-12"}`}
         />
       </Button>
     </div>

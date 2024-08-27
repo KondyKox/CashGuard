@@ -11,7 +11,7 @@ const Button: React.FC<ButtonProps> = ({
 }) => {
   return (
     <button
-      className={`rounded hover:text-red-600 hover:scale-125 transition-all duration-300 ease-in-out ${className}`}
+      className={`rounded hover:text-red hover:scale-125 transition-all duration-300 ease-in-out ${className}`}
       {...props}
     >
       {children}

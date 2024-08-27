@@ -10,8 +10,8 @@ const Expense: React.FC<ExpenseProps> = ({
   isPaid = false,
 }) => {
   return (
-    <div className="rounded border border-slate-500 p-4 m-4 w-2/3 hover:bg-slate-500 cursor-pointer transition-all duration-500 hover:shadow-lg">
-      <div className="flex justify-between items-center font-bold text-2xl text-red-600">
+    <div className="rounded border border-secondary p-4 m-4 w-1/2 hover:bg-secondary cursor-pointer transition-all duration-500 hover:shadow-lg">
+      <div className="flex justify-between items-center font-bold text-2xl text-red">
         <span>{addedBy}</span>
         <span>{amount}zł</span>
       </div>
@@ -27,7 +27,7 @@ const Expense: React.FC<ExpenseProps> = ({
         </span>
         <span
           className={`text-xl py-4 font-bold ${
-            isPaid ? "text-green-500" : "text-red-600"
+            isPaid ? "text-green" : "text-red"
           }`}
         >
           {isPaid ? "Opłacono" : "Nie opłacono"}
