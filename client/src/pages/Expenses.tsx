@@ -1,16 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Expense from "../components/Expense";
 import { ExpenseProps } from "../types/ExpenseProps";
 
 const selectedCategoryKey = "ExpenseCalculator__SelectedCategory"; // Local Storage Key
 
-type Category = "My Expenses" | "All Expenses";
+type Category = "My Expenses" | "All Expenses"; // Expenses category
 
 const Expenses = () => {
   const [selectedCategory, setSelectedCategory] = useState<Category>(() => {
     const savedCategory = localStorage.getItem(selectedCategoryKey);
     return (savedCategory as Category) || "My Expenses";
   });
+  const [expenses, setExpenses] = useState<ExpenseProps[]>([]);
 
   // Change category
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -19,19 +20,26 @@ const Expenses = () => {
     localStorage.setItem(selectedCategoryKey, newCategory);
   };
 
-  // Expense props
-  const expenseProps: ExpenseProps = {
-    amount: 10,
-    description: "GÓWNO",
-    addedBy: "kondy",
-    date: new Date(),
-    dueDate: new Date(),
-    isPaid: false,
-  };
+  // Get expenses from database
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/expenses");
+        if (!response.ok) throw new Error("Network response was not ok.");
+
+        const data: ExpenseProps[] = await response.json();
+        setExpenses(data);
+      } catch (error) {
+        console.error("Failed to fetch expenses:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <main className="flex flex-col justify-center items-center p-4">
-      <div className="rounded bg-secondary px-2 py-1 flex justify-center items-center w-1/2">
+      <div className="rounded bg-secondary px-2 py-1 flex justify-center items-center min-w-1/2">
         <select
           name="select-category"
           id="category"
@@ -43,7 +51,11 @@ const Expenses = () => {
           <option value="Wszystkie wydatki">Wszystkie wydatki</option>
         </select>
       </div>
-      <Expense {...expenseProps} />
+      <div>
+        {expenses.map((expense, index) => (
+          <Expense key={index} {...expense} />
+        ))}
+      </div>
     </main>
   );
 };

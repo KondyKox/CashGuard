@@ -2,9 +2,11 @@ import { Schema, model, Document } from "mongoose";
 
 interface IExpense extends Document {
   amount: number;
-  category: string;
-  payer: string;
+  description: string;
+  addedBy: string;
   date: Date;
+  dueDate: Date;
+  isPaid: boolean;
 }
 
 const expenseSchema = new Schema<IExpense>({
@@ -12,17 +14,24 @@ const expenseSchema = new Schema<IExpense>({
     type: Number,
     required: true,
   },
-  category: {
+  description: {
     type: String,
     required: true,
   },
-  payer: {
+  addedBy: {
     type: String,
     required: true,
   },
   date: {
     type: Date,
     default: Date.now,
+  },
+  dueDate: {
+    type: Date,
+  },
+  isPaid: {
+    type: Boolean,
+    default: false,
   },
 });
 

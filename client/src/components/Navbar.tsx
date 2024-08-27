@@ -58,7 +58,7 @@ const Navbar: React.FC<UserProps> = ({ isLoggedIn, onLogin, onLogout }) => {
 
       {isMobile ? (
         <>
-          <Button onClick={toggleMenu} style={{ zIndex: 20 }}>
+          <Button className="filter invert" onClick={toggleMenu} style={{ zIndex: 20 }}>
             <img
               src="/mobile_navbar.png"
               alt="Mobile Menu"
