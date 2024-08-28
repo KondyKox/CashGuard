@@ -1,12 +1,13 @@
+import { Link } from "react-router-dom";
 import Button from "../components/Button";
 import { UserProps } from "../types/UserProps";
 
 // Nav links
 const navLinks = [
-  { label: "Wydatki", onClick: () => console.log("Wydatki clicked") },
+  { label: "Wydatki", path: "/" },
   {
     label: "Dodaj wydatek",
-    onClick: () => console.log("Dodaj wydatek clicked"),
+    path: "/add-expense",
   },
 ];
 
@@ -20,9 +21,9 @@ export const renderNavLinks = (isMobile: boolean) => {
     >
       {navLinks.map((link, index) => (
         <li key={index} className={`px-2 ${isMobile ? "text-xl" : null}`}>
-          <Button className={`bg-transparent`} onClick={link.onClick}>
-            {link.label}
-          </Button>
+          <Link to={link.path}>
+            <Button className={`bg-transparent`}>{link.label}</Button>
+          </Link>
         </li>
       ))}
     </ul>
@@ -35,12 +36,16 @@ export const renderAuthButtons = (
   isMobile: boolean
 ) => {
   return (
-    <div className={isMobile ? "flex justify-center items-center mt-5 pt-5 border-t" : ""}>
+    <div
+      className={
+        isMobile ? "flex justify-center items-center mt-5 pt-5 border-t" : ""
+      }
+    >
       <Button onClick={isLoggedIn ? onLogout : onLogin}>
         <img
           src={isLoggedIn ? "/logout.png" : "/login.png"}
           alt={isLoggedIn ? "Logout" : "Login"}
-          className={`filter invert ${ isMobile ? "w-16 h-16" : "w-12 h-12"}`}
+          className={`filter invert ${isMobile ? "w-16 h-16" : "w-12 h-12"}`}
         />
       </Button>
     </div>

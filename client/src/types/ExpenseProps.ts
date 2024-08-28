@@ -1,4 +1,5 @@
 export interface ExpenseProps {
+  _id: string;
   amount: number;
   description: string;
   addedBy: string;
