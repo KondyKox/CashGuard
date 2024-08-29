@@ -40,13 +40,13 @@ router.get("/:id", async (req: Request, res: Response) => {
   }
 });
 
-// Update expense
+// Update selected expense
 router.put("/:id", async (req: Request, res: Response) => {
   try {
     const updatedExpense = await Expense.findByIdAndUpdate(
       req.params.id,
-      { isPaid: req.body.isPaid },
-      { new: true }
+      req.body,
+      { new: true, runValidators: true }
     );
 
     if (!updatedExpense)
