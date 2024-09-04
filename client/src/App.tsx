@@ -5,11 +5,13 @@ import { UserProps } from "./types/UserProps";
 import Expenses from "./pages/Expenses";
 import { MobileProvider } from "./context/MobileContext";
 import ExpenseDetails from "./pages/ExpenseDetails";
+import Login from "./components/Login";
+import Register from "./components/Register";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // For testing
+  // Handle login / register
   const handleLogin = () => setIsLoggedIn(true);
   const handleLogout = () => setIsLoggedIn(false);
 
@@ -29,7 +31,8 @@ function App() {
             <Route path="/" element={<Expenses />} />
             <Route path="/add-expense" element={<h1>Dodaj wydatek</h1>} />
             <Route path="/expenses/:id" element={<ExpenseDetails />} />
-            <Route path="/login" element={<h1>Logowanie</h1>} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
           </Routes>
         </main>
       </Router>

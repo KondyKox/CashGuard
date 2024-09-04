@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import Button from "../components/Button";
 import { UserProps } from "../types/UserProps";
+import AuthButton from "../components/AuthButton";
 
 // Nav links
 const navLinks = [
@@ -41,13 +42,11 @@ export const renderAuthButtons = (
         isMobile ? "flex justify-center items-center mt-5 pt-5 border-t" : ""
       }
     >
-      <Button onClick={isLoggedIn ? onLogout : onLogin}>
-        <img
-          src={isLoggedIn ? "/logout.png" : "/login.png"}
-          alt={isLoggedIn ? "Logout" : "Login"}
-          className={`filter invert ${isMobile ? "w-16 h-16" : "w-12 h-12"}`}
-        />
-      </Button>
+      <AuthButton
+        isLoggedIn={isLoggedIn}
+        onLogin={onLogin}
+        onLogout={onLogout}
+      />
     </div>
   );
 };
