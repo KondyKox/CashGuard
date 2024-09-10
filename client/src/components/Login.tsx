@@ -1,47 +1,32 @@
-import React, { useState } from "react";
-import Button from "./Button";
+import React from "react";
+import { LoginProps } from "../types/AuthProps";
+import AuthForm from "./AuthForm";
+import { Link, useNavigate } from "react-router-dom";
+import { handleLogin } from "../utils/auth";
 
-const userTokenKey = "ExpenseCalculator__UserToken"; // Local Storage Key
-
-const Login: React.FC = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleLogin = async () => {
-    try {
-      const response = await fetch("/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.message || "Failed to login");
-
-      localStorage.setItem(userTokenKey, data.token);
-      alert("Login successful!");
-    } catch (error: any) {
-      console.error("Login error:", error);
-      alert(error.message);
-    }
-  };
+const Login: React.FC<LoginProps> = ({ onLogin }) => {
+  const navigate = useNavigate();
 
   return (
-    <div>
-      <h2>Login</h2>
-      <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
+    <div className="flex flex-col justify-center items-center">
+      <AuthForm
+        title="Logowanie"
+        onSubmit={async (formData) => {
+          const { email, password } = formData;
+          handleLogin({ email, password }, onLogin, navigate);
+        }}
+        fields={[
+          { name: "email", type: "email", placeholder: "Email" },
+          { name: "password", type: "password", placeholder: "Hasło" },
+        ]}
       />
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <Button onClick={handleLogin}>Login</Button>
+      <p>
+        Nie masz konta?{" "}
+        <Link to={"/register"} className="text-red hover:text-green transition">
+          {" "}
+          Zarejestruj się tutaj!
+        </Link>
+      </p>
     </div>
   );
 };

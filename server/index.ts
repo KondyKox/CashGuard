@@ -2,7 +2,8 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
-import router from "./routes/expenseRoutes";
+import expenseRouter from "./routes/expenseRoutes";
+import authRouter from "./routes/userRoutes";
 
 dotenv.config();
 
@@ -25,7 +26,8 @@ app.use((req, res, next) => {
 });
 
 // Routes
-app.use("/api/expenses", router);
+app.use("/api/expenses", expenseRouter);
+app.use("/api", authRouter);
 
 mongoose
   .connect(process.env.MONGO_URI!)

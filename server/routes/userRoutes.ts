@@ -3,10 +3,10 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/User";
 
-const router = express.Router();
+const authRouter = express.Router();
 
 // Register user
-router.post("/register", async (req, res) => {
+authRouter.post("/register", async (req, res) => {
   const { username, email, password } = req.body;
 
   try {
@@ -30,11 +30,11 @@ router.post("/register", async (req, res) => {
 });
 
 // Login user
-router.post("/login", async (req, res) => {
+authRouter.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const user = await User.findOne(email);
+    const user = await User.findOne({ email });
     if (!user)
       return res.status(400).json({ message: "Invalid email or password." });
 
@@ -53,4 +53,4 @@ router.post("/login", async (req, res) => {
   }
 });
 
-export default router;
+export default authRouter;

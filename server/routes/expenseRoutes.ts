@@ -1,10 +1,10 @@
 import { Router, Request, Response } from "express";
 import Expense from "../models/Expense";
 
-const router = Router();
+const expenseRouter = Router();
 
 // Get all expenses
-router.get("/", async (req: Request, res: Response) => {
+expenseRouter.get("/", async (req: Request, res: Response) => {
   try {
     const expenses = await Expense.find();
     res.status(200).json(expenses);
@@ -14,7 +14,7 @@ router.get("/", async (req: Request, res: Response) => {
 });
 
 // Add expense
-router.post("/add", async (req: Request, res: Response) => {
+expenseRouter.post("/add", async (req: Request, res: Response) => {
   try {
     const newExpense = new Expense(req.body);
     const savedExpense = await newExpense.save();
@@ -25,7 +25,7 @@ router.post("/add", async (req: Request, res: Response) => {
 });
 
 // Get selected expense
-router.get("/:id", async (req: Request, res: Response) => {
+expenseRouter.get("/:id", async (req: Request, res: Response) => {
   console.log(`Request ID: ${req.params.id}`);
   try {
     const expense = await Expense.findById(req.params.id);
@@ -41,7 +41,7 @@ router.get("/:id", async (req: Request, res: Response) => {
 });
 
 // Update selected expense
-router.put("/:id", async (req: Request, res: Response) => {
+expenseRouter.put("/:id", async (req: Request, res: Response) => {
   try {
     const updatedExpense = await Expense.findByIdAndUpdate(
       req.params.id,
@@ -58,4 +58,4 @@ router.put("/:id", async (req: Request, res: Response) => {
   }
 });
 
-export default router;
+export default expenseRouter;

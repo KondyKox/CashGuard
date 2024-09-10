@@ -2,15 +2,16 @@ import React, { useContext, useState } from "react";
 import Button from "./Button";
 import { UserProps } from "../types/UserProps";
 import {
-  renderAuthButtons,
-  renderNavLinks,
-} from "../utilities/renderNavElements";
+  renderAuthButton,
+  renderMobileMenu,
+  renderNavElements,
+} from "../utils/navElements";
 import { MobileContext } from "../context/MobileContext";
 
 // Optional: Define a default value for isMobile
 const defaultMobileContext = { isMobile: false };
 
-const Navbar: React.FC<UserProps> = ({ isLoggedIn, onLogin, onLogout }) => {
+const Navbar: React.FC<UserProps> = ({ isLoggedIn }) => {
   // Use context and provide a default value if context is undefined
   const context = useContext(MobileContext);
   const isMobile = context ? context.isMobile : defaultMobileContext.isMobile;
@@ -22,29 +23,9 @@ const Navbar: React.FC<UserProps> = ({ isLoggedIn, onLogin, onLogout }) => {
     setMenuOpen(!menuOpen);
   };
 
-  // Mobile navbar
-  const renderMobileMenu = () => {
-    return (
-      <div
-        className={`absolute top-0 left-0 w-full h-full bg-primary ${
-          menuOpen ? "flex flex-col justify-center items-center" : "hidden"
-        }`}
-        style={{ zIndex: 10 }}
-      >
-        <div className="p-4 m-4">
-          <h1 className="font-bold text-xl ">Kalkulator Wydatków</h1>
-        </div>
-        <div>{renderNavLinks(isMobile)}</div>
-        <div>
-          {renderAuthButtons({ isLoggedIn, onLogin, onLogout }, isMobile)}
-        </div>
-      </div>
-    );
-  };
-
   return (
     <nav className="flex justify-between items-center p-4 border-b border-slate-900">
-      <div className="font-bold text-xl">Kalkulator Wydatków</div>
+      <div className="font-bold text-xl">CashGuard</div>
 
       {isMobile ? (
         <>
@@ -59,14 +40,12 @@ const Navbar: React.FC<UserProps> = ({ isLoggedIn, onLogin, onLogout }) => {
               className="w-7 h-7"
             />
           </Button>
-          {renderMobileMenu()}
+          {renderMobileMenu(isMobile, isLoggedIn, menuOpen)}
         </>
       ) : (
         <>
-          <div>{renderNavLinks(isMobile)}</div>
-          <div>
-            {renderAuthButtons({ isLoggedIn, onLogin, onLogout }, isMobile)}
-          </div>
+          <div>{renderNavElements(isMobile)}</div>
+          <div>{renderAuthButton(isLoggedIn)}</div>
         </>
       )}
     </nav>

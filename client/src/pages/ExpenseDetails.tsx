@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Button from "../components/Button";
-import { fetchExpenseById, updateExpenseById } from "../utilities/api";
+import { fetchExpenseById, updateExpenseById } from "../utils/api";
 
 const ExpenseDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import { UserProps } from "./types/UserProps";
@@ -7,17 +7,26 @@ import { MobileProvider } from "./context/MobileContext";
 import ExpenseDetails from "./pages/ExpenseDetails";
 import Login from "./components/Login";
 import Register from "./components/Register";
+import { checkIfLoggedIn, removeToken } from "./utils/auth";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(checkIfLoggedIn());
+
+  useEffect(() => {
+    setIsLoggedIn(checkIfLoggedIn());
+  }, []);
 
   // Handle login / register
   const handleLogin = () => setIsLoggedIn(true);
-  const handleLogout = () => setIsLoggedIn(false);
+  const handleLogout = () => {
+    removeToken();
+    setIsLoggedIn(false);
+  };
 
   // User Props
   const userProps: UserProps = {
-    isLoggedIn,
+    isLoggedIn: isLoggedIn,
     onLogin: handleLogin,
     onLogout: handleLogout,
   };
@@ -29,9 +38,23 @@ function App() {
           <Navbar {...userProps} />
           <Routes>
             <Route path="/" element={<Expenses />} />
-            <Route path="/add-expense" element={<h1>Dodaj wydatek</h1>} />
-            <Route path="/expenses/:id" element={<ExpenseDetails />} />
-            <Route path="/login" element={<Login />} />
+            <Route
+              path="/add-expense"
+              element={
+                <ProtectedRoute>
+                  <h1>Dodaj wydatek</h1>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/expenses/:id"
+              element={
+                <ProtectedRoute>
+                  <ExpenseDetails />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/login" element={<Login onLogin={handleLogin} />} />
             <Route path="/register" element={<Register />} />
           </Routes>
         </main>

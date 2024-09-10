@@ -1,53 +1,53 @@
-import React, { useState } from "react";
-import Button from "./Button";
+import React from "react";
+import AuthForm from "./AuthForm";
+import { Link, useNavigate } from "react-router-dom";
+import { handleLogin } from "../utils/auth";
 
 const Register: React.FC = () => {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-  const handleRegister = async () => {
+  const handleRegister = async (formData: { [key: string]: string }) => {
     try {
       const response = await fetch("/api/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, email, password }),
+        body: JSON.stringify(formData),
       });
 
       const data = await response.json();
-      if (!response.ok) throw new Error(data.message || "Failed to register");
+      if (!response.ok) throw new Error(data.message || "Registration error");
 
-      alert("Registration successful!");
+      // Auto login after registration
+      await handleLogin(
+        { email: formData.email, password: formData.password },
+        () => {},
+        navigate
+      );
     } catch (error: any) {
-      console.error("Registration error: ", error);
       alert(error.message);
     }
   };
 
   return (
-    <div>
-      <h2>Register</h2>
-      <input
-        type="text"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        placeholder="Username"
+    <div className="flex flex-col justify-center items-center">
+      <AuthForm
+        title="Rejestracja"
+        onSubmit={handleRegister}
+        fields={[
+          { name: "username", type: "text", placeholder: "Nazwa użytkownika" },
+          { name: "email", type: "email", placeholder: "Email" },
+          { name: "password", type: "password", placeholder: "Hasło" },
+        ]}
       />
-      <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="Email"
-      />
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Password"
-      />
-      <Button onClick={handleRegister}>Register</Button>
+      <p>
+        Masz już konto?{" "}
+        <Link to={"/login"} className="text-red hover:text-green transition">
+          {" "}
+          Zaloguj się tutaj!
+        </Link>
+      </p>
     </div>
   );
 };
