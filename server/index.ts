@@ -3,7 +3,8 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
 import expenseRouter from "./routes/expenseRoutes";
-import authRouter from "./routes/userRoutes";
+import authRouter from "./routes/authRoutes";
+import userRouter from "./routes/userRoutes";
 
 dotenv.config();
 
@@ -27,6 +28,7 @@ app.use((req, res, next) => {
 
 // Routes
 app.use("/api/expenses", expenseRouter);
+app.use("/api", userRouter);
 app.use("/api", authRouter);
 
 mongoose

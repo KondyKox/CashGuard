@@ -13,7 +13,11 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
         title="Logowanie"
         onSubmit={async (formData) => {
           const { email, password } = formData;
-          handleLogin({ email, password }, onLogin, navigate);
+          try {
+            await handleLogin({ email, password }, onLogin, navigate);
+          } catch (error: any) {
+            throw new Error(error.message);
+          }
         }}
         fields={[
           { name: "email", type: "email", placeholder: "Email" },

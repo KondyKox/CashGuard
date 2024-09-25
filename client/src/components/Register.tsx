@@ -26,7 +26,7 @@ const Register: React.FC = () => {
         navigate
       );
     } catch (error: any) {
-      alert(error.message);
+      throw new Error(error.message);
     }
   };
 

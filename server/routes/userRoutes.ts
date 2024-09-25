@@ -1,56 +1,40 @@
 import express from "express";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import User from "../models/User";
+import Expense from "../models/Expense";
+import { authMiddleware } from "../middleware/authMiddleware";
 
-const authRouter = express.Router();
+const userRouter = express.Router();
 
-// Register user
-authRouter.post("/register", async (req, res) => {
-  const { username, email, password } = req.body;
-
-  try {
-    // Check user existence
-    const existingUser = await User.findOne({ email });
-    if (existingUser)
-      return res.status(400).json({ message: "User already exists." });
-
-    // Password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-
-    // Create new user
-    const newUser = new User({ username, email, password: hashedPassword });
-    await newUser.save();
-
-    res.status(201).json({ message: "User created successfully." });
-  } catch (error) {
-    res.status(500).json({ message: "Server error", error });
-  }
+// Get user details
+userRouter.get("/api/user", authMiddleware, async (req, res) => {
+  const user = await User.findById(req.user.id);
+  if (!user) return res.status(404).send("User not found");
+  res.json({ username: user.username, email: user.email, budget: user.budget });
 });
 
-// Login user
-authRouter.post("/login", async (req, res) => {
-  const { email, password } = req.body;
+// Get total expenses
+userRouter.get("/api/expenses/total", authMiddleware, async (req, res) => {
+  const total = await Expense.aggregate([
+    { $match: { addedBy: req.user.id } },
+    { $group: { _id: null, total: { $sum: "$amount" } } },
+  ]);
 
-  try {
-    const user = await User.findOne({ email });
-    if (!user)
-      return res.status(400).json({ message: "Invalid email or password." });
+  const monthly = await Expense.aggregate([
+    {
+      $match: {
+        addedBy: req.user.id,
+        date: {
+          $gte: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+        },
+      },
+    },
+    { $group: { _id: null, monthly: { $sum: "$amount" } } },
+  ]);
 
-    // Check passwords
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch)
-      return res.status(400).json({ message: "Invalid email or password." });
-
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET!, {
-      expiresIn: "1h",
-    });
-
-    res.json({ token, userID: user._id });
-  } catch (error) {
-    res.status(500).json({ message: "Server error", error });
-  }
+  res.json({
+    total: total.length > 0 ? total[0].total : 0,
+    monthly: monthly.length > 0 ? monthly[0].monthly : 0,
+  });
 });
 
-export default authRouter;
+export default userRouter;

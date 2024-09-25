@@ -4,6 +4,7 @@ import Button from "./Button";
 
 const AuthForm: React.FC<AuthFormProps> = ({ title, onSubmit, fields }) => {
   const [formData, setFormData] = useState<{ [key: string]: string }>({});
+  const [error, setError] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -14,8 +15,10 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, onSubmit, fields }) => {
 
     try {
       await onSubmit(formData);
+      setError(null);
     } catch (error: any) {
       alert(error.message);
+      setError(error.message);
     }
   };
 
@@ -40,6 +43,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, onSubmit, fields }) => {
         ))}
       </div>
       <Button className="text-lg pt-4 uppercase">{title}</Button>
+      {error && <p className="text-red pt-4">{error}</p>}
     </form>
   );
 };

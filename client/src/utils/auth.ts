@@ -26,6 +26,11 @@ export const handleLogin = async (
   }
 };
 
+// Handle logout
+export const logoutUser = () => {
+  localStorage.removeItem(userTokenKey);
+};
+
 // Token methods
 export const setToken = (token: string) => {
   localStorage.setItem(userTokenKey, token);
@@ -33,10 +38,6 @@ export const setToken = (token: string) => {
 
 export const getToken = () => {
   return localStorage.getItem(userTokenKey);
-};
-
-export const removeToken = () => {
-  localStorage.removeItem(userTokenKey);
 };
 
 export const checkIfLoggedIn = () => {

@@ -7,8 +7,9 @@ import { MobileProvider } from "./context/MobileContext";
 import ExpenseDetails from "./pages/ExpenseDetails";
 import Login from "./components/Login";
 import Register from "./components/Register";
-import { checkIfLoggedIn, removeToken } from "./utils/auth";
+import { checkIfLoggedIn, logoutUser } from "./utils/auth";
 import ProtectedRoute from "./components/ProtectedRoute";
+import UserPage from "./pages/UserPage";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(checkIfLoggedIn());
@@ -20,7 +21,7 @@ function App() {
   // Handle login / register
   const handleLogin = () => setIsLoggedIn(true);
   const handleLogout = () => {
-    removeToken();
+    logoutUser();
     setIsLoggedIn(false);
   };
 
@@ -56,6 +57,7 @@ function App() {
             />
             <Route path="/login" element={<Login onLogin={handleLogin} />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/user" element={<UserPage />} />
           </Routes>
         </main>
       </Router>

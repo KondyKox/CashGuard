@@ -1,9 +1,9 @@
-import { Schema, model, Document } from "mongoose";
+import { Schema, model, Document, Types } from "mongoose";
 
 interface IExpense extends Document {
   amount: number;
   description: string;
-  addedBy: string;
+  addedBy: Types.ObjectId;
   date: Date;
   dueDate: Date;
   isPaid: boolean;
@@ -19,7 +19,8 @@ const expenseSchema = new Schema<IExpense>({
     required: true,
   },
   addedBy: {
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: "User",
     required: true,
   },
   date: {
